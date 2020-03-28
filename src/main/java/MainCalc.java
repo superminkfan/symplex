@@ -1,6 +1,5 @@
 
-import java.math.BigDecimal;
-import java.util.Scanner;
+
 
 
 public class MainCalc {
@@ -8,7 +7,6 @@ public class MainCalc {
 
     private static int COL;
 
-    private static Scanner scanner = new Scanner(System.in);
 
     private static double[] calctemp(double[] temp, double[][] constLeft,
                                      double[] targetFunc, int[] basic) {
@@ -49,13 +47,14 @@ public class MainCalc {
 
     private static void printFrame(double[] targetFunc) {
         StringBuilder sb = new StringBuilder();
-        sb.append("Cj\t\t\t");
+        sb.append("Cj\t\t\t\t\t\t");
         for (int i = 0; i < targetFunc.length; i++) {
-            sb.append(targetFunc[i] + "\t");
+            sb.append(String.format(" %15f |" ,targetFunc[i] ));
         }
-        sb.append("\ncB\txB\tb\t");
+       // sb.append("\ncB\txB\tb\t\t\t\t\t");
+        sb.append(String.format("%5s  | %-2s  | %9s ||" , "\ncB" ,"xB" , "b" ));
         for (int i = 0; i < targetFunc.length; i++) {
-            sb.append("a" + (i + 1) + "\t");
+            sb.append(String.format(" %14s  |" ,"x" + (i + 1) ));
         }
         System.out.print(sb);
     }
@@ -65,14 +64,23 @@ public class MainCalc {
         printFrame(targetFunc);
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < ROW; i++) {
-            sb.append("\n" + targetFunc[basic[i]] + "\tx" + (basic[i] + 1)
-                    + "\t" + constraintRight[i] + "\t");
-            for (int j = 0; j < COL; j++) {
-                sb.append(constraintLeft[i][j] + "\t");
+//            sb.append("\n" + targetFunc[basic[i]] + "\tx" + (basic[i] + 1)
+//                    + "\t" + constraintRight[i] + "\t");
+//
+            sb.append(String.format("%s | x%-2d | %9f ||" , "\n" + targetFunc[basic[i]] ,(basic[i] + 1) , constraintRight[i] ));
+
+            for (int j = 0; j < COL+1; j++) {
+                sb.append(String.format(" %15f |" ,constraintLeft[i][j] ));
             }
             sb.append("\n");
+
+
         }
         System.out.println(sb);
+
+
+
+
     }
 
     public static void main(String[] args) {
@@ -84,8 +92,15 @@ public class MainCalc {
                                        { 4, 3, 1, 0, 0, 1}};
 
         double[] constraintsRight =    { 13, 9, 32 };
+//        double[] targetFunc = { 5, 3, 1, 0, 0};
+//        ROW = 2;
+//        COL = 2 + ROW;
+//        double[][] constraintsLeft = { { 2, -1, 3, 1 ,0},
+//                                       { 2, 0, -1, 0, 1 }};
+//
+//        double[] constraintsRight =    { 13, 9};
 
-        double[] temp = new double[COL];
+        double[] temp = new double[COL+1];
 
         int tempMinPos;
         double[] miniRatio = new double[ROW];
@@ -109,27 +124,15 @@ public class MainCalc {
 
             tempMinPos = minimum(temp);
             printAll(targetFunc, constraintsRight, constraintsLeft, basic);
-            System.out.print("Zj-Cj\t\t\t");
-            for (int i = 0; i < COL; i++) {
-                System.out.print(temp[i] + "\t");
+            System.out.print("Zj-Cj\t\t\t\t\t");
+            for (int i = 0; i < COL+1; i++) {
+                System.out.print(String.format(" %15f |" ,temp[i] ));
             }
-//            System.out.println("\n--------------------------------------------------");
-//            System.out.println("DEBUG");
-//
-//            for (int i: basic) {
-//                System.out.println(i);
-//            }
-//            System.out.println("DEBUG2");
-//
-//            for (double i: x) {
-//                System.out.println(i);
-//            }
 
             System.out.println("\n--------------------------------------------------");
             System.out.println("Basic variables : ");
             for (int i = 0; i < ROW; i++) {
-                System.out.println("index i = " + i );
-                System.out.println("basic[i] = " + basic[i]);
+
 
                 x[basic[i]] = constraintsRight[i];
                 x[nonBasic[i]] = 0;
@@ -180,7 +183,7 @@ public class MainCalc {
                 constraintsRight[i] -= constraintsRight[miniRatioMinPos] * key;
             }
 
-            for (int i = 0; i < COL; i++) {
+            for (int i = 0; i < COL+1; i++) {
                 flag = true;
                 if (temp[i] < 0) {
                     flag = false;
